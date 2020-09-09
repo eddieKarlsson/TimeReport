@@ -7,7 +7,7 @@ from settings import Settings
 
 
 class CustomerReport():
-    """Create a customer timreport from internal reporting excel"""
+    """Create a customer timreport from internal reporting excels"""
 
     def __init__(self):
         # Create settings object and load settings from JSON
