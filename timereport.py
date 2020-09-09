@@ -137,13 +137,67 @@ class CustomerReport():
                     cell = self.sheet.cell(row=i, column=10)
                     day["overtime_2"] = cell.value
 
+    def in_excel_print_created_dic(self):
+        for day in self.days:
+            print("\t", day)
+        print('\n')
+
+    def user_input_choose_template(self):
+        print("SELECT TIME REPORT:")
+
+        time_template = {
+            1: {'Filename': 'MC SV.xlsx', 'type': 'mc', 'lang': 'sv'},
+            2: {'Filename': 'MC ENG.xlsx', 'type': 'mc', 'lang': 'en'},
+            3: {'Filename': 'TP SPAIN.xlsx', 'type': 'tp_spain', 'lang': 'en'}
+            }
+        for key, value in time_template.items():
+            print("\t", key, ' : ', value)
+
+        select = int(input("Choose timereport: "))
+
+        self.ttp = time_template[select]
+
+        print(self.ttp)
+
+    def out_excel_copy_template(self):
+        """Copy template to output folder and rename"""
+        template_file = 'data/template/' + self.ttp['Filename']
+        t_file, t_ext = os.path.splitext(template_file)
+
+        # Create new file name, change some strings if Swedish
+        if self.ttp['lang'] == 'sv':
+            t = 'Tidrapport - '
+            w = 'V'
+        else:
+            t = 'Timereport - '
+            w = 'W'
+        w += str(self.usr_s['week'])  # add week number to string
+        self.new_report = (self.usr_s['output_folder'] + t
+                           + str(self.usr_s['projno']) + ' - ' + w + t_ext)
+
+        shutil.copy(template_file, self.new_report)
+        print('\t', self.new_report)
+
+    def out_excel_write_data(self):
+        """Select which template to import and then execute"""
+        if self.ttp['type'] == 'mc':
+            from mc import insert_data_to_report
+            insert_data_to_report(self.new_report, self.days, self.usr_s)
+
+        if self.ttp['type'] == 'tp_spain':
+            from tp_spain import insert_data_to_report
+            insert_data_to_report(self.new_report, self.days, self.usr_s)
+
+
     def run(self):
         self.open_in_excel()
         self._in_excel_find_week()
         self._in_excel_find_days_create_dict()
         self._in_excel_find_day_data()
-        for day in self.days:
-            print(day)
+        self.in_excel_print_created_dic()
+        self.user_input_choose_template()
+        self.out_excel_copy_template()
+        self.out_excel_write_data()
 
 
 if __name__ == '__main__':

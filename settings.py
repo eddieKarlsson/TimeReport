@@ -23,7 +23,9 @@ class Settings:
             'output_folder': 'output',
             'projno': 200012,
             'month': 'Sept',
-            'week': 36
+            'week': 36,
+            'year': 2020,
+
         }
 
         return user_settings
