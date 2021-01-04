@@ -2,7 +2,7 @@ import openpyxl as xl
 import sys
 
 
-def insert_data_to_report(wb_path, days_dict, usr_s_dict):
+def insert_data_to_report(wb_path, days_dict, usr_s_dict, week_sheetname='W'):
     # Try to open excel
     try:
         wb = xl.load_workbook(wb_path)
@@ -26,5 +26,7 @@ def insert_data_to_report(wb_path, days_dict, usr_s_dict):
     week = usr_s_dict['week']
     ws['M12'] = round(week / 4.348)
     ws['N12'] = week
+
+    ws.title = week_sheetname  # set sheet name
 
     wb.save(wb_path)

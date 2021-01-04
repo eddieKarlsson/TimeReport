@@ -167,27 +167,31 @@ class CustomerReport():
         # Create new file name, change some strings if Swedish
         if self.ttp['lang'] == 'sv':
             t = 'Tidrapport - '
-            w = 'V'
+            self.w = 'V'
         else:
             t = 'Timereport - '
-            w = 'W'
-        w += str(self.usr_s['week'])  # add week number to string
+            self.w = 'W'
+        self.w += str(self.usr_s['week'])  # add week number to string
         self.new_report = (self.usr_s['output_folder'] + t
-                           + str(self.usr_s['projno']) + ' - ' + w + t_ext)
+                           + str(self.usr_s['projno']) + ' - ' + self.w
+                           + t_ext)
 
         shutil.copy(template_file, self.new_report)
         print('\t', self.new_report)
 
     def out_excel_write_data(self):
         """Select which template to import and then execute"""
+
+        self.week_format = self.w
+
         if self.ttp['type'] == 'mc':
             from mc import insert_data_to_report
-            insert_data_to_report(self.new_report, self.days, self.usr_s)
+            insert_data_to_report(self.new_report, self.days, self.usr_s,
+                                  week_sheetname=self.week_format)
 
         if self.ttp['type'] == 'tp_spain':
             from tp_spain import insert_data_to_report
             insert_data_to_report(self.new_report, self.days, self.usr_s)
-
 
     def run(self):
         self.open_in_excel()
