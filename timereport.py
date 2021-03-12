@@ -34,6 +34,7 @@ class CustomerReport():
 
     def _in_excel_find_week(self):
         # Loop A column, until week is found
+        start_row_found = False
         for i in range(7, 300):
             cell = self.sheet.cell(row=i, column=1)
             if str(self.usr_s['week']) in str(cell.value):
@@ -42,7 +43,7 @@ class CustomerReport():
                 break
 
         if not start_row_found:
-            print(f'Start row not found in sheet {self.sheet}, will exit')
+            print(f'ERROR! Start row not found in sheet {self.sheet}')
             sys.exit()
 
     def _in_excel_find_days_create_dict(self):

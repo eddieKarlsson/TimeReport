@@ -24,7 +24,13 @@ def insert_data_to_report(wb_path, days_dict, usr_s_dict, week_sheetname='W'):
     ws['J12'] = usr_s_dict['projno']  # Projnr
     ws['L12'] = usr_s_dict['year']  # Year
     week = usr_s_dict['week']
-    ws['M12'] = round(week / 4.348)
+
+    month = round(week / 4.348)
+    if month < 1:
+        ws['M12'] = 1
+    else:
+        ws['M12'] = month
+
     ws['N12'] = week
 
     ws.title = week_sheetname  # set sheet name
